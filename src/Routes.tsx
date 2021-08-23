@@ -17,6 +17,7 @@ export const Routes: React.FC = () => {
   const { data, loading } = useMeQuery();
   const loggedOut = !(data && data.me && data.me.id) && !loading;
   const prefersDarkMode = data && data.me && data.me.prefersDarkMode;
+
   const theme = useMemo(
     () =>
       createMuiTheme({
