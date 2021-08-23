@@ -14,6 +14,7 @@ import jwtDecode from "jwt-decode";
 import "./index.css";
 
 const cache = new InMemoryCache({});
+console.log(process.env.NODE_ENV);
 
 const requestLink = new ApolloLink(
   (operation, forward) =>
@@ -70,7 +71,7 @@ const client = new ApolloClient({
       fetchAccessToken: () => {
         return fetch(
           process.env.NODE_ENV === "development"
-            ? "http://localhost:4000}/refresh_token"
+            ? "http://localhost:4000/refresh_token"
             : "https://personen.herokuapp.com/refresh_token",
           {
             method: "POST",
