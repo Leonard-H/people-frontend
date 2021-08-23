@@ -1,0 +1,65 @@
+query People($name: String, $limit: Int) {
+  people(name: $name, limit: $limit) {
+    name
+    id
+    bornOn
+    firstNames
+    familyName
+    age
+  }
+}
+
+query Person($id: String!) {
+  person(id: $id) {
+    id
+    name
+    firstNames
+    familyName
+    bornOn
+    bornIn
+    livedIn
+    jobs
+    familyStatus
+    sources
+    sbId
+    status
+    parents {
+      id
+      name
+      descendants {
+        id
+        name
+      }
+    }
+    descendants {
+      id
+      name
+    }
+    marriages {
+      person {
+        id
+        name
+      }
+    }
+  }
+}
+
+query BirthdayPeople($birthday: String) {
+  birthdayPeople(birthday: $birthday) {
+    id
+    name
+    bornOn
+  }
+}
+
+query MarriagePeople($marriageDate: String) {
+  marriagePeople(marriageDate: $marriageDate) {
+    id
+    name
+    marriages {
+      person {
+        id
+      }
+    }
+  }
+}

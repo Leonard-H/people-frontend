@@ -1,0 +1,83 @@
+query Users {
+  users {
+    id
+    email
+    username
+    firstName
+    familyName
+    familyId
+    userType
+  }
+}
+
+mutation Login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    accessToken
+    user {
+      id
+      email
+      username
+      firstName
+      familyName
+      familyId
+      prefersDarkMode
+      userType
+    }
+  }
+}
+
+mutation Register(
+  $email: String!
+  $username: String!
+  $firstName: String!
+  $familyName: String!
+  $familyId: String!
+  $password: String!
+  $userType: Float!
+) {
+  register(
+    email: $email
+    username: $username
+    firstName: $firstName
+    familyName: $familyName
+    familyId: $familyId
+    password: $password
+    userType: $userType
+  )
+}
+
+query Me {
+  me {
+    id
+    email
+    username
+    firstName
+    familyName
+    familyId
+    prefersDarkMode
+    userType
+  }
+}
+
+mutation Logout {
+  logout
+}
+
+mutation DeleteUser($id: String!) {
+  deleteUser(id: $id) {
+    id
+    email
+    username
+    firstName
+    familyName
+    familyId
+    userType
+  }
+}
+
+mutation ChangePassword($newPassword: String!, $oldPassword: String!) {
+  changePassword(newPassword: $newPassword, oldPassword: $oldPassword) {
+    success
+    error
+  }
+}
