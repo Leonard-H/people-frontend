@@ -68,10 +68,15 @@ const client = new ApolloClient({
         }
       },
       fetchAccessToken: () => {
-        return fetch("http://localhost:4000/refresh_token", {
-          method: "POST",
-          credentials: "include"
-        });
+        return fetch(
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:4000}/refresh_token"
+            : "https://personen.herokuapp.com/refresh_token",
+          {
+            method: "POST",
+            credentials: "include"
+          }
+        );
       },
       handleFetch: accessToken => {
         setAccessToken(accessToken);
@@ -90,7 +95,7 @@ const client = new ApolloClient({
       uri:
         process.env.NODE_ENV === "development"
           ? "http://localhost:4000/graphql"
-          : "https://personen.herokuapp.com/",
+          : "https://personen.herokuapp.com/graphql",
       credentials: "include"
     })
   ]),
