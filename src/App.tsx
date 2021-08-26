@@ -9,10 +9,15 @@ export const App: React.FC<Props> = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:4000/refresh_token", {
-      method: "POST",
-      credentials: "include"
-    }).then(async x => {
+    fetch(
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:4000/refresh_token"
+        : "https://personen.herokuapp.com/refresh_token",
+      {
+        method: "POST",
+        credentials: "include"
+      }
+    ).then(async x => {
       const { accessToken } = await x.json();
       setAccessToken(accessToken);
       setLoading(false);
