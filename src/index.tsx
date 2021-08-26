@@ -14,7 +14,13 @@ import jwtDecode from "jwt-decode";
 import "./index.css";
 
 const cache = new InMemoryCache({});
-console.log(process.env.NODE_ENV);
+console.log(
+  process.env.NODE_ENV,
+  process.env.NODE_ENV === "development",
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:4000/refresh_token"
+    : "https://personen.herokuapp.com/refresh_token"
+);
 
 const requestLink = new ApolloLink(
   (operation, forward) =>
