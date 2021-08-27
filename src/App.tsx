@@ -15,7 +15,8 @@ export const App: React.FC<Props> = () => {
         : "https://personen.herokuapp.com/refresh_token",
       {
         method: "POST",
-        credentials: "include"
+        credentials: "include",
+        mode: "no-cors"
       }
     ).then(async x => {
       const { accessToken } = await x.json();
