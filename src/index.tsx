@@ -81,8 +81,8 @@ const client = new ApolloClient({
             : "https://personen.herokuapp.com/refresh_token",
           {
             method: "POST",
-            credentials: "include"
-            // mode: "no-cors"
+            credentials: "include",
+            mode: "no-cors"
           }
         );
       },
