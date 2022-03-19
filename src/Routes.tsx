@@ -11,7 +11,7 @@ import Person from "./pages/Person";
 import { Dashboard } from "./pages/Dashboard";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import ChangePassword from "./pages/ChangePassword";
-import About from "./pages/About";
+// import About from "./pages/About";
 
 export const Routes: React.FC = () => {
   const { data, loading } = useMeQuery();
@@ -33,7 +33,7 @@ export const Routes: React.FC = () => {
         <Layout>
           <Switch>
             <Route exact path="/login" component={Login} />
-            {/*loggedOut ? <Redirect to="/login" /> : null*/}
+            {loggedOut ? <Redirect to="/login" /> : null}
             <Route exact path="/" component={Dashboard} />
             {data && data.me && data.me.id ? (
               <Redirect from="/login" to="/" />
@@ -44,7 +44,7 @@ export const Routes: React.FC = () => {
             <Route exact path="/change-password" component={ChangePassword} />
             <Route exact path="/search" component={Search} />
             <Route exact path="/person/:id" component={Person} />
-            <Route exact path="/about" component={About} />
+            {/*<Route exact path="/about" component={About} />*/}
           </Switch>
         </Layout>
       </BrowserRouter>
