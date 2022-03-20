@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@material-ui/core/Container";
 import { useParams, useHistory } from "react-router-dom";
 import { usePersonQuery, Person as PersonType } from "../generated/graphql";
@@ -9,6 +9,13 @@ import formatDate from "../util/formatDate";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import Collapse from "@material-ui/core/Collapse";
+import IconButton from "@material-ui/core/IconButton";
+import { KeyboardArrowUp, KeyboardArrowDown } from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
   space: {
@@ -31,6 +38,11 @@ const useStyles = makeStyles(theme => ({
       width: 200
     }
   },
+  firstCell: {
+    width: 10,
+    margin: 0,
+    padding: 0
+  },
   border: {
     borderRight: "solid 1px rgb(210, 210, 210)",
     marginRight: -20,
@@ -45,6 +57,8 @@ type Props = { id: string };
 const Person: React.FC<Props> = () => {
   const classes = useStyles();
   const { id } = useParams();
+  const [livedInOpen, setLivedInOpen] = useState(false);
+  const [jobsOpen, setJobsOpen] = useState(false);
   const { data, loading } = usePersonQuery({ variables: { id } });
   if (loading) return <CircularProgress />;
   if (!data || !data.person) return <Typography>error</Typography>;
@@ -75,38 +89,167 @@ const Person: React.FC<Props> = () => {
           xs={6}
           className={`${classes.border} ${classes.borderOverlay}`}
         >
-          <Typography>Kenn Name: {data.person.name}</Typography>
-          <Typography>
-            Voller Name: {data.person.firstNames} {data.person.familyName}
-          </Typography>
-          <Typography>
-            Geburtstag:{" "}
-            {data.person.bornOn ? formatDate(data.person.bornOn) : "-"}
-          </Typography>
-          <Typography>
-            Geburtsort: {data.person.bornIn ? data.person.bornIn : "-"}
-          </Typography>
-          <Typography>
-            Wohnorte:{" "}
-            {data.person.livedIn && data.person.livedIn[0]
-              ? list(data.person.livedIn)
-              : "-"}
-          </Typography>
-          <Typography>
-            Berufe:{" "}
-            {data.person.jobs && data.person.jobs[0]
-              ? list(data.person.jobs)
-              : "-"}
-          </Typography>
-          <Typography>
-            Status: {data.person.status ? data.person.status : "-"}
-          </Typography>
-          <Typography>
-            Quellen:{" "}
-            {data.person.sources && data.person.sources[0]
-              ? list(data.person.sources)
-              : "-"}
-          </Typography>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginBottom: 20
+            }}
+          >
+            <Typography variant="h5">{data.person.name}</Typography>
+            <Typography variant="h6">
+              {" "}
+              {data.person.bornOn
+                ? `*${formatDate(data.person.bornOn, { yearOnly: true })}`
+                : ""}
+              {data.person.diedOn
+                ? ` †${formatDate(data.person.diedOn, { yearOnly: true })}`
+                : ""}
+            </Typography>
+          </div>
+
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableCell
+                  align="left"
+                  className={classes.firstCell}
+                ></TableCell>
+                <TableCell align="right">Name</TableCell>
+                <TableCell align="left">
+                  {data.person.firstNames} {data.person.familyName}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell
+                  align="left"
+                  className={classes.firstCell}
+                ></TableCell>
+                <TableCell align="right">Geburt</TableCell>
+                <TableCell align="left">
+                  {data.person.bornOn ? formatDate(data.person.bornOn) : "-"},{" "}
+                  {data.person.bornIn}
+                </TableCell>
+              </TableRow>
+              {data.person.diedOn ? (
+                <TableRow>
+                  <TableCell
+                    align="left"
+                    className={classes.firstCell}
+                  ></TableCell>
+                  <TableCell align="right">Tod</TableCell>
+                  <TableCell align="left">
+                    {formatDate(data.person.diedOn)}, {data.person.diedIn}
+                  </TableCell>
+                </TableRow>
+              ) : null}
+              <TableRow>
+                <TableCell align="left" className={classes.firstCell}>
+                  <IconButton
+                    aria-label="expand row"
+                    size="small"
+                    onClick={() => setLivedInOpen(!livedInOpen)}
+                  >
+                    {livedInOpen ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                  </IconButton>
+                </TableCell>
+                <TableCell align="right">Wohnort</TableCell>
+                <TableCell align="left">
+                  {data.person.livedIn[data.person.livedIn.length - 1]} (
+                  {data.person.diedOn ? "zuletzt" : "derzeitig"})
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell
+                  className={classes.firstCell}
+                  style={{ height: 0, paddingBottom: 0, paddingTop: 0 }}
+                />
+                <TableCell
+                  align="right"
+                  style={{
+                    paddingBottom: 0,
+                    paddingTop: 0,
+                    position: "relative"
+                  }}
+                >
+                  <Collapse in={livedInOpen} timeout="auto" unmountOnExit>
+                    <span style={{ position: "absolute", right: 15, top: 0 }}>
+                      Geschichte
+                    </span>
+                  </Collapse>
+                </TableCell>
+                <TableCell
+                  style={{ paddingBottom: 0, paddingTop: 0 }}
+                  colSpan={6}
+                >
+                  <Collapse in={livedInOpen} timeout="auto" unmountOnExit>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          data.person.livedIn && data.person.livedIn[0]
+                            ? list(data.person.livedIn)
+                            : "-"
+                      }}
+                    />
+                  </Collapse>
+                </TableCell>
+              </TableRow>
+              {/* Jobs */}
+              <TableRow>
+                <TableCell align="left" className={classes.firstCell}>
+                  <IconButton
+                    aria-label="expand row"
+                    size="small"
+                    onClick={() => setJobsOpen(!jobsOpen)}
+                  >
+                    {jobsOpen ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                  </IconButton>
+                </TableCell>
+                <TableCell align="right">Beruf</TableCell>
+                <TableCell align="left">
+                  {data.person.jobs
+                    ? data.person.jobs[data.person.jobs.length - 1] +
+                      ` (${data.person.diedOn ? "zuletzt" : "derzeitig"})`
+                    : "-"}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell
+                  className={classes.firstCell}
+                  style={{ height: 0, paddingBottom: 0, paddingTop: 0 }}
+                />
+                <TableCell
+                  align="right"
+                  style={{
+                    paddingBottom: 0,
+                    paddingTop: 0,
+                    position: "relative"
+                  }}
+                >
+                  <Collapse in={jobsOpen} timeout="auto" unmountOnExit>
+                    <span style={{ position: "absolute", right: 15, top: 0 }}>
+                      Geschichte
+                    </span>
+                  </Collapse>
+                </TableCell>
+                <TableCell
+                  style={{ paddingBottom: 0, paddingTop: 0 }}
+                  colSpan={6}
+                >
+                  <Collapse in={jobsOpen} timeout="auto" unmountOnExit>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          data.person.jobs && data.person.jobs[0]
+                            ? list(data.person.jobs)
+                            : "-"
+                      }}
+                    />
+                  </Collapse>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </Grid>
         <Grid xs={3} className={classes.borderOverlay}>
           <Typography color="textSecondary" variant="h5">
@@ -130,11 +273,31 @@ const Person: React.FC<Props> = () => {
       <DisplayList people={data.person.descendants} horizontal={true} />
       <div className={classes.space} />
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <Tooltip title="Kenn-Nummer">
-          <Typography color="textSecondary" variant="h6">
-            {data.person.id}
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Tooltip title="Kenn-Nummer">
+            <Typography color="textSecondary" variant="h6">
+              {data.person.id}
+            </Typography>
+          </Tooltip>
+          <Typography
+            style={{ marginLeft: 20 }}
+            color="textSecondary"
+            variant="body2"
+          >
+            Quellen:{" "}
+            {data.person.sources && data.person.sources[0]
+              ? listHorizontal(data.person.sources)
+              : "-"}
           </Typography>
-        </Tooltip>
+          <Typography
+            style={{ marginLeft: 20 }}
+            color="textSecondary"
+            variant="body2"
+          >
+            {data.person.status ? `Stand ${data.person.status}` : ""}
+          </Typography>
+        </div>
+
         <Tooltip title="Schwaab ID">
           <Typography color="textSecondary" variant="h6">
             {data.person.sbId ? data.person.sbId : "-"}
@@ -204,5 +367,16 @@ function getSiblingArray(person: PersonType) {
 }
 
 function list(arr: string[]) {
-  return arr.reduce((total, item) => total + (total ? ", " : "") + item, "");
+  return arr.reduce(
+    (total, item) =>
+      total + (total ? ", </br>" : "") + `<span>${item.trim()}</span>`,
+    ""
+  );
+}
+
+function listHorizontal(arr: string[]) {
+  return arr.reduce(
+    (total, item) => total + (total ? ", " : "") + item.trim(),
+    ""
+  );
 }

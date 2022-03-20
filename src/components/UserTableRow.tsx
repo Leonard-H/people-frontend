@@ -42,6 +42,7 @@ type Props = {
     firstName: string;
     familyName: string;
     familyId: string;
+    userType: string;
   };
 };
 const UserTableRow: React.FC<Props> = ({ user }) => {
@@ -99,6 +100,7 @@ const UserTableRow: React.FC<Props> = ({ user }) => {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography>User ID: {user.id}</Typography>
+              <Typography>User Type: {user.userType}</Typography>
             </Box>
           </Collapse>
         </TableCell>

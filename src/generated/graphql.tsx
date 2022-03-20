@@ -164,7 +164,7 @@ export type PersonQuery = (
   { __typename?: 'Query' }
   & { person: (
     { __typename?: 'Person' }
-    & Pick<Person, 'id' | 'name' | 'firstNames' | 'familyName' | 'bornOn' | 'bornIn' | 'livedIn' | 'jobs' | 'familyStatus' | 'sources' | 'sbId' | 'status'>
+    & Pick<Person, 'id' | 'name' | 'firstNames' | 'familyName' | 'bornOn' | 'bornIn' | 'livedIn' | 'jobs' | 'familyStatus' | 'sources' | 'sbId' | 'status' | 'diedOn' | 'diedIn'>
     & { parents: Array<(
       { __typename?: 'Person' }
       & Pick<Person, 'id' | 'name'>
@@ -346,6 +346,8 @@ export const PersonDocument = gql`
     sources
     sbId
     status
+    diedOn
+    diedIn
     parents {
       id
       name

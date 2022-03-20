@@ -23,6 +23,8 @@ query Person($id: String!) {
     sources
     sbId
     status
+    diedOn
+    diedIn
     parents {
       id
       name

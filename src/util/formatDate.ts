@@ -1,10 +1,13 @@
 import { format } from "date-fns";
 
-const formatDate = (dateString: string): string => {
+const formatDate = (
+  dateString: string,
+  options?: { yearOnly?: boolean }
+): string => {
   const correctDateString = getCorrectDateString(dateString);
   const date = new Date(correctDateString);
   if (isNaN(date as any)) return dateString;
-  return format(new Date(correctDateString), "dd.MM.yyyy");
+  return format(date, options && options.yearOnly ? "yyyy" : "dd.MM.yyyy");
 };
 
 export default formatDate;

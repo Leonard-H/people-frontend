@@ -11,7 +11,7 @@ import { useUsersQuery } from "../generated/graphql";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import UserTableRow from "./UserTableRow";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   table: {
     minWidth: 650
   },

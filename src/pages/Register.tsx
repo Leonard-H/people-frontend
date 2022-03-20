@@ -120,7 +120,7 @@ export const Register: React.FC<RouteComponentProps> = ({ history }) => {
               <Select
                 id="userType"
                 value={values.userType}
-                onChange={handleChange}
+                onChange={handleChange("userType")}
                 label="Benutzerart"
               >
                 <MenuItem value={0}>Basic</MenuItem>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@material-ui/core/Container";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
@@ -20,14 +20,19 @@ type Props = {};
 const ChangePassword: React.FC<Props> = () => {
   const history = useHistory();
   const classes = useStyles();
+  const [error, setError] = useState("");
   const [changePassword, { data }] = useChangePasswordMutation();
   const { handleSubmit, handleChange, values } = useFormik({
     initialValues: {
       oldPassword: "",
-      newPassword: ""
+      newPassword: "",
+      confirmNewPassword: ""
     },
     onSubmit: async variables => {
       console.log("form submitted");
+      if (variables.newPassword !== variables.confirmNewPassword)
+        return setError("Passwörter stimmen nicht überein.");
+      setError("");
       const response = await changePassword({ variables });
       console.log(response);
       if (response.data && response.data.changePassword.success)
@@ -59,6 +64,17 @@ const ChangePassword: React.FC<Props> = () => {
             value={values.newPassword}
           />
         </FormControl>
+        <FormControl fullWidth className={classes.field}>
+          <TextField
+            label="Neues Passwort bestätigen"
+            variant="outlined"
+            type="password"
+            id="confirmNewPassword"
+            required
+            onChange={handleChange}
+            value={values.confirmNewPassword}
+          />
+        </FormControl>
         <Button color="primary" variant="contained" type="submit">
           Passwort Vernädern
         </Button>
@@ -66,6 +82,7 @@ const ChangePassword: React.FC<Props> = () => {
       {data && !data.changePassword.success ? (
         <Alert severity="error">{data.changePassword.error}</Alert>
       ) : null}
+      {error ? <Alert severity="error">{error}</Alert> : null}
     </Container>
   );
 };
