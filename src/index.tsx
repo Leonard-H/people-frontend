@@ -32,7 +32,7 @@ const requestLink = new ApolloLink(
           if (accessToken) {
             operation.setContext({
               headers: {
-                authorization: `bearer ${accessToken}`
+                authorization: `bearer ${accessToken}`,
               }
             });
           }
@@ -53,6 +53,7 @@ const requestLink = new ApolloLink(
 );
 
 const client = new ApolloClient({
+  ...({ credentials: "include" }) as any,
   link: ApolloLink.from([
     new TokenRefreshLink({
       accessTokenField: "accessToken",
@@ -64,7 +65,7 @@ const client = new ApolloClient({
         }
 
         try {
-          const { exp } = jwtDecode(token);
+          const { exp }: any = jwtDecode(token);
           if (Date.now() >= exp * 1000) {
             return false;
           } else {
@@ -81,7 +82,7 @@ const client = new ApolloClient({
             : "https://personen.herokuapp.com/refresh_token",
           {
             method: "POST",
-            credentials: "include"
+            credentials: "include",
           }
         );
       },
