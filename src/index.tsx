@@ -104,7 +104,8 @@ const client = new ApolloClient({
         process.env.NODE_ENV === "development"
           ? "http://localhost:4000/graphql"
           : "https://personen.herokuapp.com/graphql",
-      credentials: "include"
+      credentials: "include",
+      fetchOptions: { credentials: "include" },
     })
   ]),
   cache
