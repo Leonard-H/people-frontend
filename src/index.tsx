@@ -3,11 +3,8 @@ import ReactDOM from "react-dom";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { getAccessToken, setAccessToken } from "./accessToken";
 import { App } from "./App";
-import { ApolloClient } from "apollo-client";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { HttpLink } from "apollo-link-http";
+import { ApolloClient, InMemoryCache, HttpLink, ApolloLink, Observable } from "@apollo/client";
 import { onError } from "apollo-link-error";
-import { ApolloLink, Observable } from "apollo-link";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
 
@@ -57,7 +54,7 @@ const client = new ApolloClient({
   link: ApolloLink.from([
     new TokenRefreshLink({
       accessTokenField: "accessToken",
-      isTokenValidOrUndefined: () => {
+      isTokenValidOrUndefined: async () => {
         const token = getAccessToken();
 
         if (!token) {
@@ -97,7 +94,7 @@ const client = new ApolloClient({
     onError(({ graphQLErrors, networkError }) => {
       console.log(graphQLErrors);
       console.log(networkError);
-    }),
+    }) as any,
     requestLink,
     new HttpLink({
       uri:
