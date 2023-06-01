@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { getAccessToken, setAccessToken } from "./accessToken";
 import { App } from "./App";
-import { ApolloClient, InMemoryCache, HttpLink, ApolloLink, Observable } from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloLink, Observable, createHttpLink } from "@apollo/client";
 import { onError } from "apollo-link-error";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
@@ -50,7 +50,7 @@ const requestLink = new ApolloLink(
 );
 
 const client = new ApolloClient({
-  ...({ credentials: "include" }) as any,
+  ...({ credentials: "include", withCredentials: true }) as any,
   link: ApolloLink.from([
     new TokenRefreshLink({
       accessTokenField: "accessToken",
@@ -96,13 +96,12 @@ const client = new ApolloClient({
       console.log(networkError);
     }) as any,
     requestLink,
-    new HttpLink({
+    createHttpLink({
       uri:
         process.env.NODE_ENV === "development"
           ? "http://localhost:4000/graphql"
           : "https://personen.herokuapp.com/graphql",
       credentials: "include",
-      fetchOptions: { credentials: "include" },
     })
   ]),
   cache
