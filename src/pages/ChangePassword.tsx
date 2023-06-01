@@ -76,7 +76,7 @@ const ChangePassword: React.FC<Props> = () => {
           />
         </FormControl>
         <Button color="primary" variant="contained" type="submit">
-          Passwort Vernädern
+          Passwort Ändern
         </Button>
       </form>
       {data && !data.changePassword.success ? (

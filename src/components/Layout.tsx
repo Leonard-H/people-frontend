@@ -96,7 +96,6 @@ const Layout: React.FC<Props> = ({ children }) => {
   if (loading) return <CircularProgress />;
 
   const username = data && data.me && data.me.username ? data.me.username : "";
-
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
   const menuItems = [
     {
@@ -104,11 +103,13 @@ const Layout: React.FC<Props> = ({ children }) => {
       path: "/",
       icon: <Storage color="secondary" />
     },
-    {
-      text: "Benutzer",
-      path: "/users",
-      icon: <People color="secondary" />
-    }
+    ...((data&&data.me&&data.me.userType)==="2" ? 
+      [{
+        text: "Benutzer",
+        path: "/users",
+        icon: <People color="secondary" />
+      }] : []
+    )
   ];
 
   const drawer = (

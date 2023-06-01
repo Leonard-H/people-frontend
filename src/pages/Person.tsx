@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
 type Props = { id: string };
 const Person: React.FC<Props> = () => {
   const classes = useStyles();
-  const { id } = useParams();
+  const { id } = useParams() as {id: string};
   const [livedInOpen, setLivedInOpen] = useState(false);
   const [jobsOpen, setJobsOpen] = useState(false);
   const { data, loading } = usePersonQuery({ variables: { id } });
@@ -253,7 +253,7 @@ const Person: React.FC<Props> = () => {
         </Grid>
         <Grid xs={3} className={classes.borderOverlay}>
           <Typography color="textSecondary" variant="h5">
-            Verheirated mit:
+            Verheiratet mit:
           </Typography>
 
           <DisplayList

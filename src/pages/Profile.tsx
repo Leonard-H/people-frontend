@@ -7,6 +7,7 @@ import Paper from "@material-ui/core/Paper";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
+import MuiLink from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
 import { setAccessToken } from "../accessToken";
@@ -78,7 +79,9 @@ const Profile: React.FC<Props> = () => {
                 Familienchroink ID
               </TableCell>
               <TableCell align="right">
-                {data && data.me && data.me.familyId}
+                <MuiLink style={{ cursor: "pointer" }} onClick={() => history.push(`/person/${data && data.me && data.me.familyId}`)}>
+                  {data && data.me && data.me.familyId}
+                </MuiLink>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -92,7 +95,7 @@ const Profile: React.FC<Props> = () => {
         className={classes.button}
         onClick={() => history.push("/change-password")}
       >
-        passwort verändern
+        passwort ändern
       </Button>
       <Button
         variant="contained"
