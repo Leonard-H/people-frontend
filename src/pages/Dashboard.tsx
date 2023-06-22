@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   usePeopleQuery,
   useBirthdayPeopleQuery,
-  useMarriagePeopleQuery
+  useMarriagePeopleQuery,
+  useMePersonQuery
 } from "../generated/graphql";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PeopleList from "../components/PeopleList";
@@ -16,6 +17,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import IconButton from "@material-ui/core/IconButton";
 import format from "date-fns/format";
+import { getSiblingArray } from "./Person";
 
 const useStyles = makeStyles({
   header: {
@@ -32,7 +34,17 @@ interface Props {}
 
 export const Dashboard: React.FC<Props> = () => {
   const classes = useStyles();
-  const { data, loading, error, called } = usePeopleQuery();
+  const { data, loading, error, called } = useMePersonQuery();
+  const [nearestNeighbors, setNearestNeighbors] = useState([] as any);
+  useEffect(() => {
+    if (!data || !data.mePerson) return;
+    setNearestNeighbors([
+      {id:data.mePerson.id, name:data.mePerson.name},
+      ...data.mePerson.descendants,
+      ...data.mePerson.parents,
+      ...getSiblingArray(data.mePerson as any).filter((s: any) => s.id !== data.mePerson.id)
+    ])
+  },[data]);
   const [selectedDate, setSelectedDate] = useState<MaterialUiPickersDate>(
     new Date()
   );
@@ -141,7 +153,7 @@ export const Dashboard: React.FC<Props> = () => {
         {loading ? (
           <CircularProgress />
         ) : (
-          <PeopleList people={data ? data.people.slice(0, 20) : []} />
+          <PeopleList people={nearestNeighbors} />
         )}
       </Container>
     </MuiPickersUtilsProvider>

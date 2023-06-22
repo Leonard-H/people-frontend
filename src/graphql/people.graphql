@@ -46,6 +46,31 @@ query Person($id: String!) {
   }
 }
 
+query mePerson {
+  mePerson {
+    id
+    name
+    parents {
+      id
+      name
+      descendants {
+        id
+        name
+      }
+    }
+    descendants {
+      id
+      name
+    }
+    marriages {
+      person {
+        id
+        name
+      }
+    }
+  }
+}
+
 query BirthdayPeople($birthday: String) {
   birthdayPeople(birthday: $birthday) {
     id

@@ -105,6 +105,7 @@ export type Query = {
   me?: Maybe<User>,
   people: Array<Person>,
   person: Person,
+  mePerson: Person,
   birthdayPeople: Array<Person>,
   marriagePeople: Array<Person>,
 };
@@ -165,6 +166,34 @@ export type PersonQuery = (
   & { person: (
     { __typename?: 'Person' }
     & Pick<Person, 'id' | 'name' | 'firstNames' | 'familyName' | 'bornOn' | 'bornIn' | 'livedIn' | 'jobs' | 'familyStatus' | 'sources' | 'sbId' | 'status' | 'diedOn' | 'diedIn'>
+    & { parents: Array<(
+      { __typename?: 'Person' }
+      & Pick<Person, 'id' | 'name'>
+      & { descendants: Array<(
+        { __typename?: 'Person' }
+        & Pick<Person, 'id' | 'name'>
+      )> }
+    )>, descendants: Array<(
+      { __typename?: 'Person' }
+      & Pick<Person, 'id' | 'name'>
+    )>, marriages: Array<(
+      { __typename?: 'PersonMarriage' }
+      & { person: Maybe<(
+        { __typename?: 'Person' }
+        & Pick<Person, 'id' | 'name'>
+      )> }
+    )> }
+  ) }
+);
+
+export type MePersonQueryVariables = {};
+
+
+export type MePersonQuery = (
+  { __typename?: 'Query' }
+  & { mePerson: (
+    { __typename?: 'Person' }
+    & Pick<Person, 'id' | 'name'>
     & { parents: Array<(
       { __typename?: 'Person' }
       & Pick<Person, 'id' | 'name'>
@@ -379,6 +408,42 @@ export const PersonDocument = gql`
       
 export type PersonQueryHookResult = ReturnType<typeof usePersonQuery>;
 export type PersonQueryResult = ApolloReactCommon.QueryResult<PersonQuery, PersonQueryVariables>;
+export const MePersonDocument = gql`
+    query mePerson {
+  mePerson {
+    id
+    name
+    parents {
+      id
+      name
+      descendants {
+        id
+        name
+      }
+    }
+    descendants {
+      id
+      name
+    }
+    marriages {
+      person {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+    export function useMePersonQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MePersonQuery, MePersonQueryVariables>) {
+      return ApolloReactHooks.useQuery<MePersonQuery, MePersonQueryVariables>(MePersonDocument, baseOptions);
+    }
+      export function useMePersonLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MePersonQuery, MePersonQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<MePersonQuery, MePersonQueryVariables>(MePersonDocument, baseOptions);
+      }
+      
+export type MePersonQueryHookResult = ReturnType<typeof useMePersonQuery>;
+export type MePersonQueryResult = ApolloReactCommon.QueryResult<MePersonQuery, MePersonQueryVariables>;
 export const BirthdayPeopleDocument = gql`
     query BirthdayPeople($birthday: String) {
   birthdayPeople(birthday: $birthday) {

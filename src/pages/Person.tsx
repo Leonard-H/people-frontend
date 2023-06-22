@@ -356,7 +356,7 @@ function DisplayList({
   );
 }
 
-function getSiblingArray(person: PersonType) {
+export function getSiblingArray(person: PersonType) {
   const allSiblings = person.parents
     .map(p => p.descendants)
     .reduce((total, item) => [...total, ...item], []);
