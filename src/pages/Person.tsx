@@ -117,7 +117,7 @@ const Person: React.FC<Props> = () => {
                 ></TableCell>
                 <TableCell align="right">Name</TableCell>
                 <TableCell align="left">
-                  {data.person.firstNames} {data.person.familyName}
+                  {data.person.title} {data.person.firstNames} {data.person.familyName} {data.person.bornFamilyName!==data.person.familyName&&`(geb. ${data.person.bornFamilyName})`}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -248,6 +248,18 @@ const Person: React.FC<Props> = () => {
                   </Collapse>
                 </TableCell>
               </TableRow>
+              {data.person.notes ? (
+                <TableRow>
+                  <TableCell
+                    align="left"
+                    className={classes.firstCell}
+                  ></TableCell>
+                  <TableCell align="right">Bemerkungen</TableCell>
+                  <TableCell align="left">
+                    {data.person.notes}
+                  </TableCell>
+                </TableRow>
+              ) : null}
             </TableBody>
           </Table>
         </Grid>

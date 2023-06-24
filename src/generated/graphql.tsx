@@ -77,6 +77,9 @@ export type Person = {
   title?: Maybe<Scalars['String']>,
   bornOn?: Maybe<Scalars['String']>,
   bornIn?: Maybe<Scalars['String']>,
+  notes?: Maybe<Scalars['String']>,
+  descendantNotes?: Maybe<Scalars['String']>,
+  bornFamilyName?: Maybe<Scalars['String']>,
   parents: Array<Person>,
   descendants: Array<Person>,
   diedOn?: Maybe<Scalars['String']>,
@@ -165,7 +168,7 @@ export type PersonQuery = (
   { __typename?: 'Query' }
   & { person: (
     { __typename?: 'Person' }
-    & Pick<Person, 'id' | 'name' | 'firstNames' | 'familyName' | 'bornOn' | 'bornIn' | 'livedIn' | 'jobs' | 'familyStatus' | 'sources' | 'sbId' | 'status' | 'diedOn' | 'diedIn'>
+    & Pick<Person, 'id' | 'name' | 'firstNames' | 'familyName' | 'bornOn' | 'bornIn' | 'livedIn' | 'jobs' | 'familyStatus' | 'sources' | 'sbId' | 'status' | 'diedOn' | 'diedIn' | 'title' | 'notes' | 'descendantNotes' | 'bornFamilyName'>
     & { parents: Array<(
       { __typename?: 'Person' }
       & Pick<Person, 'id' | 'name'>
@@ -377,6 +380,10 @@ export const PersonDocument = gql`
     status
     diedOn
     diedIn
+    title
+    notes
+    descendantNotes
+    bornFamilyName
     parents {
       id
       name

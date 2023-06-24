@@ -25,6 +25,10 @@ query Person($id: String!) {
     status
     diedOn
     diedIn
+    title
+    notes
+    descendantNotes
+    bornFamilyName
     parents {
       id
       name
