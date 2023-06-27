@@ -18,7 +18,7 @@ import Avatar from "@material-ui/core/Avatar";
 import { green, grey } from "@material-ui/core/colors";
 import SearchBar from "./SearchBar";
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const useStyles = makeStyles(theme => ({
   page: {

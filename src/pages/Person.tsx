@@ -5,7 +5,7 @@ import { usePersonQuery, Person as PersonType } from "../generated/graphql";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import formatDate from "../util/formatDate";
+import formatDate, { getCorrectDateString } from "../util/formatDate";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -140,6 +140,30 @@ const Person: React.FC<Props> = () => {
                   <TableCell align="right">Tod</TableCell>
                   <TableCell align="left">
                     {formatDate(data.person.diedOn)}, {data.person.diedIn}
+                  </TableCell>
+                </TableRow>
+              ) : null}
+              {data.person.bornOn ? (
+                <TableRow>
+                  <TableCell
+                    align="left"
+                    className={classes.firstCell}
+                  ></TableCell>
+                  <TableCell align="right">Lebensalter</TableCell>
+                  <TableCell align="left">
+                    {data.person.diedOn ? getLifeAge(data.person as PersonType) : getCurrentAge(data.person as PersonType)} Jahre
+                  </TableCell>
+                </TableRow>
+              ) : null}
+              {data.person.diedOn && data.person.bornOn ? (
+                <TableRow>
+                  <TableCell
+                    align="left"
+                    className={classes.firstCell}
+                  ></TableCell>
+                  <TableCell align="right">Präsentalter</TableCell>
+                  <TableCell align="left">
+                    {getCurrentAge(data.person as PersonType)} Jahre
                   </TableCell>
                 </TableRow>
               ) : null}
@@ -391,4 +415,14 @@ function listHorizontal(arr: string[]) {
     (total, item) => total + (total ? ", " : "") + item.trim(),
     ""
   );
+}
+
+function getLifeAge(person: PersonType) {
+  if (!person.diedOn || !person.bornOn) return;
+  return Math.floor(10*(new Date(getCorrectDateString(person.diedOn)).getTime() - new Date(getCorrectDateString(person.bornOn)).getTime())/(365.25*24*60*60*1000))/10;
+}
+
+function getCurrentAge(person: PersonType) {
+  if (!person.bornOn) return;
+  return Math.floor(((new Date().getTime() - new Date(getCorrectDateString(person.bornOn)).getTime())/(365.25*24*60*60*1000))*10)/10;
 }

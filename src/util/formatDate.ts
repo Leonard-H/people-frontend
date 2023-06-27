@@ -12,7 +12,7 @@ const formatDate = (
 
 export default formatDate;
 
-function getCorrectDateString(dateString: string) {
+export function getCorrectDateString(dateString: string) {
   if (dateString.length > 10) return dateString;
   return `${dateString.slice(3, 5)}.${dateString.slice(
     0,
