@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import { makeStyles } from "@material-ui/core/styles";
 import { grey } from "@material-ui/core/colors";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles(theme => ({
   page: {
@@ -26,6 +27,7 @@ export const Login: React.FC<Props> = () => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [login] = useLoginMutation();
   const history = useHistory();
 
@@ -35,30 +37,36 @@ export const Login: React.FC<Props> = () => {
       <form
         onSubmit={async e => {
           e.preventDefault();
-          const response = await login({
-            variables: {
-              email,
-              password
-            },
-            update: (store, { data }) => {
-              if (!data) {
-                return null;
-              }
 
-              store.writeQuery<MeQuery>({
-                query: MeDocument,
-                data: {
-                  me: data.login.user
+          try {
+            const response = await login({
+              variables: {
+                email,
+                password
+              },
+              update: (store, { data }) => {
+                if (!data) {
+                  return null;
                 }
-              });
+
+                store.writeQuery<MeQuery>({
+                  query: MeDocument,
+                  data: {
+                    me: data.login.user
+                  }
+                });
+              }
+            });
+
+            if (response && response.data) {
+              setAccessToken(response.data.login.accessToken);
             }
-          });
 
-          if (response && response.data) {
-            setAccessToken(response.data.login.accessToken);
+            history.push("/");
+
+          } catch (e) {
+            setError(e.message)
           }
-
-          history.push("/");
         }}
       >
         <FormControl fullWidth className={classes.field}>
@@ -86,6 +94,9 @@ export const Login: React.FC<Props> = () => {
         <Button color="primary" variant="contained" type="submit">
           Anmelden
         </Button>
+
+        {error && <Alert severity="error">{error}</Alert>}
+
       </form>
     </Container>
   );

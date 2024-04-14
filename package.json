@@ -27,6 +27,7 @@
     "formik": "^2.2.9",
     "graphql": "^14.5.6",
     "jwt-decode": "^3.1.2",
+    "mui": "^0.0.1",
     "optimism": "^0.16.2",
     "qs": "^6.10.1",
     "react": "^16.9.0",
@@ -36,6 +37,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.1.1",
     "typescript": "3.9.5",
+    "uuid": "^9.0.0",
     "yup": "^0.32.9"
   },
   "scripts": {

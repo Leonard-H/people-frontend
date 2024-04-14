@@ -13,6 +13,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import ChangePassword from "./pages/ChangePassword";
 import { EditForm } from "./pages/Edit";
 import About from "./pages/About";
+import Edits from "./pages/Edits"
 
 export const Routes: React.FC = () => {
   const { data, loading } = useMeQuery();
@@ -46,6 +47,7 @@ export const Routes: React.FC = () => {
             <Route exact path="/search" component={Search} />
             <Route exact path="/person/:id" component={Person} />
             <Route exact path="/edit" component={EditForm} />
+            <Route exact path="/edits" component={Edits} />
             <Route exact path="/about" component={About} />
           </Switch>
         </Layout>

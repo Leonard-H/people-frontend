@@ -13,7 +13,7 @@ import Hidden from "@material-ui/core/Hidden";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
-import { Menu, People, Storage } from "@material-ui/icons";
+import { Edit, Menu, People, Storage, Info } from "@material-ui/icons";
 import Avatar from "@material-ui/core/Avatar";
 import { green, grey } from "@material-ui/core/colors";
 import SearchBar from "./SearchBar";
@@ -103,7 +103,18 @@ const Layout: React.FC<Props> = ({ children }) => {
       path: "/",
       icon: <Storage color="secondary" />
     },
-    ...((data&&data.me&&data.me.userType)==="2" ? 
+    {
+      text: "Info",
+      path: "/about",
+      icon: <Info color="secondary" />
+    },
+    ...((data&&data.me&&data.me.userType)==="2"||(data&&data.me&&data.me.userType)==="1" ?
+    [{
+      text: "Bearbeiten",
+      path: "/edits",
+      icon: <Edit color="secondary" />
+    }] : []),
+    ...((data&&data.me&&data.me.userType)==="2" ?
       [{
         text: "Benutzer",
         path: "/users",

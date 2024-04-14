@@ -1,15 +1,59 @@
-mutation Edit($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
-    accessToken
-    user {
-      id
-      email
-      username
-      firstName
-      familyName
-      familyId
-      prefersDarkMode
-      userType
-    }
+mutation Edit(
+  $id: String!,
+  $familyId: String!,
+  $name: String!,
+  $firstNames: String!,
+  $familyName: String!,
+  $religion: String!,
+  $title: String!,
+  $bornOn: String!,
+  $bornIn: String!,
+  $parentIds: [String!]!,
+  $descendantIds: [String!]!,
+  $diedOn: String!,
+  $diedIn: String!,
+  $livedIn: [String!]!,
+  $jobs: [String!]!,
+  $familyStatus: String!,
+  $sources: [String!]!,
+  $sbId: String!,
+  $status: String!,
+  $notes: String!,
+  $descendantNotes: String!,
+  $bornFamilyName: String!,
+) {
+  editEdit(
+    id: $id,
+    familyId: $familyId,
+    name: $name,
+    firstNames: $firstNames,
+    familyName: $familyName,
+    religion: $religion,
+    title: $title,
+    bornOn: $bornOn,
+    bornIn: $bornIn,
+    parentIds: $parentIds,
+    descendantIds: $descendantIds,
+    diedOn: $diedOn,
+    diedIn: $diedIn,
+    livedIn: $livedIn,
+    jobs: $jobs,
+    familyStatus: $familyStatus,
+    sources: $sources,
+    sbId: $sbId,
+    status: $status,
+    notes: $notes,
+    descendantNotes: $descendantNotes,
+    bornFamilyName: $bornFamilyName,
+  ) {
+    id
+  }
+}
+
+query Edits {
+  edits {
+    id
+    familyId
+    name
   }
 }

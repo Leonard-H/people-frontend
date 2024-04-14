@@ -18,6 +18,35 @@ export type ChangePasswordResponse = {
   error?: Maybe<Scalars['String']>,
 };
 
+export type Edit = {
+   __typename?: 'Edit',
+  id: Scalars['String'],
+  author: Scalars['String'],
+  familyId?: Maybe<Scalars['String']>,
+  submitted: Scalars['Boolean'],
+  name?: Maybe<Scalars['String']>,
+  firstNames?: Maybe<Scalars['String']>,
+  familyName?: Maybe<Scalars['String']>,
+  religion?: Maybe<Scalars['String']>,
+  title?: Maybe<Scalars['String']>,
+  bornOn?: Maybe<Scalars['String']>,
+  bornIn?: Maybe<Scalars['String']>,
+  parentIds?: Maybe<Array<Scalars['String']>>,
+  descendantIds?: Maybe<Array<Scalars['String']>>,
+  diedOn?: Maybe<Scalars['String']>,
+  diedIn?: Maybe<Scalars['String']>,
+  livedIn: Array<Scalars['String']>,
+  jobs?: Maybe<Array<Scalars['String']>>,
+  familyStatus?: Maybe<Scalars['String']>,
+  sources?: Maybe<Array<Scalars['String']>>,
+  sbId?: Maybe<Scalars['String']>,
+  status?: Maybe<Scalars['String']>,
+  marriageIds?: Maybe<Array<Scalars['String']>>,
+  bornFamilyName?: Maybe<Scalars['String']>,
+  descendantNotes?: Maybe<Scalars['String']>,
+  notes?: Maybe<Scalars['String']>,
+};
+
 export type LoginResponse = {
    __typename?: 'LoginResponse',
   accessToken: Scalars['String'],
@@ -32,6 +61,9 @@ export type Mutation = {
   register: Scalars['Boolean'],
   deleteUser: Array<User>,
   changePassword: ChangePasswordResponse,
+  editEdit: Edit,
+  submitEdit: Edit,
+  writeIntoDatabase: Edit,
 };
 
 
@@ -65,6 +97,42 @@ export type MutationDeleteUserArgs = {
 export type MutationChangePasswordArgs = {
   oldPassword: Scalars['String'],
   newPassword: Scalars['String']
+};
+
+
+export type MutationEditEditArgs = {
+  bornFamilyName: Scalars['String'],
+  descendantNotes: Scalars['String'],
+  notes: Scalars['String'],
+  status: Scalars['String'],
+  sbId: Scalars['String'],
+  sources: Array<Scalars['String']>,
+  familyStatus: Scalars['String'],
+  jobs: Array<Scalars['String']>,
+  livedIn: Array<Scalars['String']>,
+  diedIn: Scalars['String'],
+  diedOn: Scalars['String'],
+  descendantIds: Array<Scalars['String']>,
+  parentIds: Array<Scalars['String']>,
+  bornIn: Scalars['String'],
+  bornOn: Scalars['String'],
+  title: Scalars['String'],
+  religion: Scalars['String'],
+  familyName: Scalars['String'],
+  firstNames: Scalars['String'],
+  name: Scalars['String'],
+  familyId: Scalars['String'],
+  id: Scalars['String']
+};
+
+
+export type MutationSubmitEditArgs = {
+  id: Scalars['String']
+};
+
+
+export type MutationWriteIntoDatabaseArgs = {
+  id: Scalars['String']
 };
 
 export type Person = {
@@ -111,6 +179,8 @@ export type Query = {
   mePerson: Person,
   birthdayPeople: Array<Person>,
   marriagePeople: Array<Person>,
+  edit: Edit,
+  edits: Edit,
 };
 
 
@@ -134,6 +204,16 @@ export type QueryMarriagePeopleArgs = {
   marriageDate?: Maybe<Scalars['String']>
 };
 
+
+export type QueryEditArgs = {
+  id: Scalars['String']
+};
+
+
+export type QueryEditsArgs = {
+  all?: Maybe<Scalars['Boolean']>
+};
+
 export type User = {
    __typename?: 'User',
   id: Scalars['String'],
@@ -145,6 +225,51 @@ export type User = {
   prefersDarkMode: Scalars['Boolean'],
   userType: Scalars['String'],
 };
+export type EditMutationVariables = {
+  id: Scalars['String'],
+  familyId: Scalars['String'],
+  name: Scalars['String'],
+  firstNames: Scalars['String'],
+  familyName: Scalars['String'],
+  religion: Scalars['String'],
+  title: Scalars['String'],
+  bornOn: Scalars['String'],
+  bornIn: Scalars['String'],
+  parentIds: Array<Scalars['String']>,
+  descendantIds: Array<Scalars['String']>,
+  diedOn: Scalars['String'],
+  diedIn: Scalars['String'],
+  livedIn: Array<Scalars['String']>,
+  jobs: Array<Scalars['String']>,
+  familyStatus: Scalars['String'],
+  sources: Array<Scalars['String']>,
+  sbId: Scalars['String'],
+  status: Scalars['String'],
+  notes: Scalars['String'],
+  descendantNotes: Scalars['String'],
+  bornFamilyName: Scalars['String']
+};
+
+
+export type EditMutation = (
+  { __typename?: 'Mutation' }
+  & { editEdit: (
+    { __typename?: 'Edit' }
+    & Pick<Edit, 'id'>
+  ) }
+);
+
+export type EditsQueryVariables = {};
+
+
+export type EditsQuery = (
+  { __typename?: 'Query' }
+  & { edits: (
+    { __typename?: 'Edit' }
+    & Pick<Edit, 'id' | 'familyId' | 'name'>
+  ) }
+);
+
 export type PeopleQueryVariables = {
   name?: Maybe<Scalars['String']>,
   limit?: Maybe<Scalars['Int']>
@@ -341,6 +466,40 @@ export type ChangePasswordMutation = (
   ) }
 );
 
+export const EditDocument = gql`
+    mutation Edit($id: String!, $familyId: String!, $name: String!, $firstNames: String!, $familyName: String!, $religion: String!, $title: String!, $bornOn: String!, $bornIn: String!, $parentIds: [String!]!, $descendantIds: [String!]!, $diedOn: String!, $diedIn: String!, $livedIn: [String!]!, $jobs: [String!]!, $familyStatus: String!, $sources: [String!]!, $sbId: String!, $status: String!, $notes: String!, $descendantNotes: String!, $bornFamilyName: String!) {
+  editEdit(id: $id, familyId: $familyId, name: $name, firstNames: $firstNames, familyName: $familyName, religion: $religion, title: $title, bornOn: $bornOn, bornIn: $bornIn, parentIds: $parentIds, descendantIds: $descendantIds, diedOn: $diedOn, diedIn: $diedIn, livedIn: $livedIn, jobs: $jobs, familyStatus: $familyStatus, sources: $sources, sbId: $sbId, status: $status, notes: $notes, descendantNotes: $descendantNotes, bornFamilyName: $bornFamilyName) {
+    id
+  }
+}
+    `;
+export type EditMutationFn = ApolloReactCommon.MutationFunction<EditMutation, EditMutationVariables>;
+
+    export function useEditMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EditMutation, EditMutationVariables>) {
+      return ApolloReactHooks.useMutation<EditMutation, EditMutationVariables>(EditDocument, baseOptions);
+    }
+export type EditMutationHookResult = ReturnType<typeof useEditMutation>;
+export type EditMutationResult = ApolloReactCommon.MutationResult<EditMutation>;
+export type EditMutationOptions = ApolloReactCommon.BaseMutationOptions<EditMutation, EditMutationVariables>;
+export const EditsDocument = gql`
+    query Edits {
+  edits {
+    id
+    familyId
+    name
+  }
+}
+    `;
+
+    export function useEditsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EditsQuery, EditsQueryVariables>) {
+      return ApolloReactHooks.useQuery<EditsQuery, EditsQueryVariables>(EditsDocument, baseOptions);
+    }
+      export function useEditsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EditsQuery, EditsQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<EditsQuery, EditsQueryVariables>(EditsDocument, baseOptions);
+      }
+      
+export type EditsQueryHookResult = ReturnType<typeof useEditsQuery>;
+export type EditsQueryResult = ApolloReactCommon.QueryResult<EditsQuery, EditsQueryVariables>;
 export const PeopleDocument = gql`
     query People($name: String, $limit: Int) {
   people(name: $name, limit: $limit) {

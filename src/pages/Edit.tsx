@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useRegisterMutation } from "../generated/graphql";
+import { useEditMutation } from "../generated/graphql";
 import { RouteComponentProps } from "react-router-dom";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
@@ -8,9 +8,6 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { useFormik } from "formik";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
 import { Save } from "@material-ui/icons";
 import Typography from "@material-ui/core/Typography";
@@ -25,7 +22,7 @@ type ValuesKey = "familyId"|"name"|"firstNames"|"familyName"|"religion"|"title"|
 
 export const EditForm: React.FC<RouteComponentProps> = ({ history }) => {
   const classes = useStyles();
-  const [register] = useRegisterMutation();
+  const [edit] = useEditMutation();
 
   const { handleSubmit, handleChange, values, handleBlur, initialValues } = useFormik({
     initialValues: {
@@ -53,7 +50,15 @@ export const EditForm: React.FC<RouteComponentProps> = ({ history }) => {
     },
     onSubmit: async variables => {
       console.log("form submitted");
-      const response = await register();
+      const response = await edit({ variables: {
+        ...variables,
+        id: String(Math.random()), //TODO: Add proper ID function
+        parentIds: variables.parentIds.split(",").map(x => x.trim()),
+        descendantIds: variables.descendantIds.split(",").map(x => x.trim()),
+        livedIn: variables.livedIn.split(",").map(x => x.trim()),
+        jobs: variables.jobs.split(",").map(x => x.trim()),
+        sources: variables.sources.split(",").map(x => x.trim()),
+      } });
 
       console.log(response);
 
@@ -69,8 +74,24 @@ export const EditForm: React.FC<RouteComponentProps> = ({ history }) => {
     return false;
   }, [values]);
 
-  const save = () => {
-
+  const save = async () => {
+    try {
+      await edit({ variables: {
+        ...values,
+        id: String(Math.random()), //TODO: Add proper ID function
+        parentIds: values.parentIds.split(",").map(x => x.trim()),
+        descendantIds: values.descendantIds.split(",").map(x => x.trim()),
+        livedIn: values.livedIn.split(",").map(x => x.trim()),
+        jobs: values.jobs.split(",").map(x => x.trim()),
+        sources: values.sources.split(",").map(x => x.trim()),
+      }});
+      for (const k of Object.keys(initialValues)) {
+        const key = k as ValuesKey;
+        initialValues[key] = values[key];
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const theme = useTheme();
@@ -101,7 +122,7 @@ export const EditForm: React.FC<RouteComponentProps> = ({ history }) => {
               <TextField
                 label="Kenn Name"
                 variant="outlined"
-                id="username"
+                id="name"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.name}
