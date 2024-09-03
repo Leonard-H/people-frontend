@@ -8,7 +8,7 @@ Bei Nutzungsproblemen sowie bei fehlerhafter Information auf dieser Seite könne
 
 ### Chronik
 
-Auf der [Startseite](/) sieht man jeden in der Chronik (lebendig sowie verstorben), der heute Geburtstag oder Hochzeitstag hat. Man kann das Datum mithilfe der drei Punkte neben "Haben Heute Geburtstag" verändern.
+Auf der [Startseite](/) sieht man jeden in der Chronik (lebendig sowie verstorben), der heute Geburtstag oder Hochzeitstag hat. Man kann das Datum mithilfe der drei Punkte neben "Haben Heute Geburtstag" verändern, und es werden Leute mit entschprechendem Gerburtstag oder Hochzeitstag angezeigt.
 
 Unter "Andere Leute" wird Ihre direkte Verwantschaft angezeigt.
 
